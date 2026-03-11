@@ -63,18 +63,7 @@ export default function QuickPromptPage() {
           if (done) break;
 
           const chunk = decoder.decode(value, { stream: true });
-          // Parse SSE data chunks from Vercel AI SDK
-          const lines = chunk.split('\n');
-          for (const line of lines) {
-            if (line.startsWith('0:')) {
-              try {
-                const text = JSON.parse(line.slice(2));
-                fullText += text;
-              } catch {
-                // skip non-JSON lines
-              }
-            }
-          }
+          fullText += chunk;
 
           // Split explanation if present
           if (fullText.includes('---EXPLANATION---')) {

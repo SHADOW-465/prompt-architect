@@ -53,5 +53,5 @@ ${explain ? `## After the optimized prompt, add a section titled "---EXPLANATION
     prompt: `Here is the raw prompt to optimize:\n\n${prompt}`,
   });
 
-  return result.toDataStreamResponse();
+  return result.toTextStreamResponse();
 }
