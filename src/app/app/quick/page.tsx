@@ -5,6 +5,8 @@ import { useAppStore } from '@/lib/store/useAppStore';
 import PromptOutput from '@/components/prompt/PromptOutput';
 import { Zap, Sparkles, FileText, Code, FileCode2, MessageSquare, Info } from 'lucide-react';
 import type { PromptFormat } from '@/lib/store/useAppStore';
+import ModelSelector from '@/components/ui/ModelSelector';
+import { DEFAULT_MODEL_ID } from '@/lib/models';
 
 const FORMAT_OPTIONS: { value: PromptFormat; label: string; icon: React.ElementType }[] = [
   { value: 'plain', label: 'Plain Text', icon: FileText },
@@ -31,6 +33,7 @@ export default function QuickPromptPage() {
   } = useAppStore();
 
   const [showExplanation, setShowExplanation] = useState(true);
+  const [selectedModel, setSelectedModel] = useState(DEFAULT_MODEL_ID);
 
   const handleOptimize = async () => {
     if (!quickPromptInput.trim() || isOptimizing) return;
@@ -48,6 +51,7 @@ export default function QuickPromptPage() {
           prompt: quickPromptInput,
           format: quickPromptFormat,
           explain: showExplanation,
+          model: selectedModel,
         }),
       });
 
@@ -150,6 +154,12 @@ export default function QuickPromptPage() {
             <Info size={14} />
             Explain Changes
           </button>
+
+          <ModelSelector
+            value={selectedModel}
+            onChange={setSelectedModel}
+            disabled={isOptimizing}
+          />
 
           <button
             onClick={handleOptimize}
