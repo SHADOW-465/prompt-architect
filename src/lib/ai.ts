@@ -1,8 +1,5 @@
-import { openai } from '@ai-sdk/openai';
 import { anthropic } from '@ai-sdk/anthropic';
 
-// Centralize AI models to make it easy to swap them later
-// We use generic names so we can upgrade the underlying model transparently
-export const reasoningModel = openai('gpt-4-turbo');
-export const fastModel = openai('gpt-3.5-turbo');
-export const creativeModel = anthropic('claude-3-opus-20240229');
+// Centralize AI models for easy swapping
+export const primaryModel = anthropic('claude-sonnet-4-20250514');
+export const fastModel = anthropic('claude-sonnet-4-20250514');

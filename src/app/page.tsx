@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Zap, Compass, BookOpen, ArrowRight, Sparkles, Brain } from "lucide-react";
 
 export default function Home() {
   return (
@@ -11,35 +12,46 @@ export default function Home() {
         </div>
 
         <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-foreground drop-shadow-sm">
-          Universal <span className="text-transparent bg-clip-text bg-gradient-to-r from-cta to-emerald-300">AI Prompt</span> Architect
+          Prompt <span className="text-transparent bg-clip-text bg-gradient-to-r from-cta to-emerald-300">Architect</span>
         </h1>
 
         <p className="text-xl text-foreground/70 max-w-2xl leading-relaxed">
-          Convert vague user intent into highly structured, context-rich prompts.
-          Stop guessing and start engineering.
+          Design, optimize, and test AI prompts with guided architecture.
+          Stop guessing — start engineering.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 w-full justify-center mt-8">
-          <Link href="/architect" className="btn-primary w-full sm:w-auto hover:scale-[1.02]">
-            Launch Prompt Architect
+          <Link href="/app/quick" className="btn-primary w-full sm:w-auto hover:scale-[1.02] flex items-center justify-center gap-2">
+            <Zap size={18} />
+            Quick Prompt
           </Link>
-          <Link href="/library" className="btn-secondary w-full sm:w-auto hover:bg-white/5">
-            Explore Prompt Library
+          <Link href="/app/architect" className="btn-secondary w-full sm:w-auto hover:bg-white/5 flex items-center justify-center gap-2">
+            <Compass size={18} />
+            Prompt Architect
           </Link>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full mt-16 text-left">
           <div className="card group">
+            <div className="w-10 h-10 rounded-lg bg-cta/10 flex items-center justify-center mb-4">
+              <Brain size={20} className="text-cta" />
+            </div>
             <h3 className="font-semibold text-lg text-foreground mb-2 group-hover:text-cta transition-colors">Intent Detection</h3>
-            <p className="text-sm text-foreground/60">Automatically categorize and structure your goals.</p>
+            <p className="text-sm text-foreground/60">AI analyzes your idea to extract product type, capability needs, and complexity level.</p>
           </div>
           <div className="card group">
-            <h3 className="font-semibold text-lg text-foreground mb-2 group-hover:text-cta transition-colors">Context Assembly</h3>
-            <p className="text-sm text-foreground/60">Identify and fill the missing gaps in your inputs.</p>
+            <div className="w-10 h-10 rounded-lg bg-cta/10 flex items-center justify-center mb-4">
+              <Sparkles size={20} className="text-cta" />
+            </div>
+            <h3 className="font-semibold text-lg text-foreground mb-2 group-hover:text-cta transition-colors">Smart Architecture</h3>
+            <p className="text-sm text-foreground/60">Get 3 architecture options from simple to multi-agent, with trade-off analysis.</p>
           </div>
           <div className="card group">
+            <div className="w-10 h-10 rounded-lg bg-cta/10 flex items-center justify-center mb-4">
+              <Zap size={20} className="text-cta" />
+            </div>
             <h3 className="font-semibold text-lg text-foreground mb-2 group-hover:text-cta transition-colors">Prompt Generation</h3>
-            <p className="text-sm text-foreground/60">Instantly generate AI-optimized payloads.</p>
+            <p className="text-sm text-foreground/60">Instantly generate production-ready prompts and pipelines, optimized for any AI model.</p>
           </div>
         </div>
       </main>
