@@ -1,5 +1,4 @@
-import { anthropic } from '@ai-sdk/anthropic';
+import { resolveModel, DEFAULT_MODEL_ID } from './models';
 
-// Centralize AI models for easy swapping
-export const primaryModel = anthropic('claude-sonnet-4-20250514');
-export const fastModel = anthropic('claude-sonnet-4-20250514');
+export const primaryModel = resolveModel(DEFAULT_MODEL_ID);
+export const fastModel = resolveModel(DEFAULT_MODEL_ID);
