@@ -24,6 +24,7 @@ interface ArchitectState {
     id: string;
     category: string;
     question: string;
+    hint?: string;
     answer: string;
   }>;
   architectureOptions: Array<{
@@ -33,6 +34,7 @@ interface ArchitectState {
     complexity: string;
     pros: string[];
     cons: string[];
+    components: string[];
     isRecommended: boolean;
   }>;
   selectedArchitecture: string | null;
