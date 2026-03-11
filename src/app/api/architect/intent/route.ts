@@ -1,4 +1,4 @@
-import { primaryModel } from '@/lib/ai';
+import { resolveModel, DEFAULT_MODEL_ID } from '@/lib/models';
 import { generateObject } from 'ai';
 import { z } from 'zod';
 
@@ -14,7 +14,8 @@ const intentSchema = z.object({
 });
 
 export async function POST(req: Request) {
-  const { idea } = await req.json();
+  const { idea, model } = await req.json();
+  const aiModel = resolveModel(model ?? DEFAULT_MODEL_ID);
 
   if (!idea || typeof idea !== 'string') {
     return new Response(JSON.stringify({ error: 'Idea is required' }), {
@@ -25,7 +26,7 @@ export async function POST(req: Request) {
 
   try {
     const result = await generateObject({
-      model: primaryModel,
+      model: aiModel,
       schema: intentSchema,
       system: `You are an AI Intent Parser for a prompt architecture system. Your job is to analyze a user's raw idea and extract structured information about what they want to build.
 

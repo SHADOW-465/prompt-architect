@@ -1,4 +1,4 @@
-import { primaryModel } from '@/lib/ai';
+import { resolveModel, DEFAULT_MODEL_ID } from '@/lib/models';
 import { generateObject } from 'ai';
 import { z } from 'zod';
 
@@ -19,7 +19,8 @@ const compileSchema = z.object({
 });
 
 export async function POST(req: Request) {
-  const { idea, parsedIntent, requirements, selectedArchitecture } = await req.json();
+  const { idea, parsedIntent, requirements, selectedArchitecture, model } = await req.json();
+  const aiModel = resolveModel(model ?? DEFAULT_MODEL_ID);
 
   if (!idea || !selectedArchitecture) {
     return new Response(JSON.stringify({ error: 'Idea and selected architecture are required' }), {
@@ -30,7 +31,7 @@ export async function POST(req: Request) {
 
   try {
     const result = await generateObject({
-      model: primaryModel,
+      model: aiModel,
       schema: compileSchema,
       system: `You are the Prompt Compiler — the final stage of a prompt architecture pipeline. Your job is to generate production-ready, optimized prompts based on the selected architecture.
 

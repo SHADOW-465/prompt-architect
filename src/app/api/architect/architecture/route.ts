@@ -1,4 +1,4 @@
-import { primaryModel } from '@/lib/ai';
+import { resolveModel, DEFAULT_MODEL_ID } from '@/lib/models';
 import { generateObject } from 'ai';
 import { z } from 'zod';
 
@@ -20,7 +20,8 @@ const architectureSchema = z.object({
 });
 
 export async function POST(req: Request) {
-  const { idea, parsedIntent, requirements } = await req.json();
+  const { idea, parsedIntent, requirements, model } = await req.json();
+  const aiModel = resolveModel(model ?? DEFAULT_MODEL_ID);
 
   if (!idea) {
     return new Response(JSON.stringify({ error: 'Idea is required' }), {
@@ -31,7 +32,7 @@ export async function POST(req: Request) {
 
   try {
     const result = await generateObject({
-      model: primaryModel,
+      model: aiModel,
       schema: architectureSchema,
       system: `You are an Architecture Engine for a prompt engineering platform. You design prompt architectures — the structure and pipeline of prompts needed to solve a user's problem.
 

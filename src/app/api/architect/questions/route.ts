@@ -1,4 +1,4 @@
-import { primaryModel } from '@/lib/ai';
+import { resolveModel, DEFAULT_MODEL_ID } from '@/lib/models';
 import { generateObject } from 'ai';
 import { z } from 'zod';
 
@@ -15,7 +15,8 @@ const questionsSchema = z.object({
 });
 
 export async function POST(req: Request) {
-  const { idea, parsedIntent } = await req.json();
+  const { idea, parsedIntent, model } = await req.json();
+  const aiModel = resolveModel(model ?? DEFAULT_MODEL_ID);
 
   if (!idea) {
     return new Response(JSON.stringify({ error: 'Idea is required' }), {
@@ -26,7 +27,7 @@ export async function POST(req: Request) {
 
   try {
     const result = await generateObject({
-      model: primaryModel,
+      model: aiModel,
       schema: questionsSchema,
       system: `You are an adaptive Question Engine for a prompt architecture system. Based on the user's idea and parsed intent, generate smart clarifying questions to fill in gaps before designing the prompt architecture.
 

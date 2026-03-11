@@ -1,10 +1,11 @@
-import { primaryModel } from '@/lib/ai';
+import { resolveModel, DEFAULT_MODEL_ID } from '@/lib/models';
 import { streamText } from 'ai';
 
 export const maxDuration = 60;
 
 export async function POST(req: Request) {
-  const { prompt, format, explain } = await req.json();
+  const { prompt, format, explain, model } = await req.json();
+  const aiModel = resolveModel(model ?? DEFAULT_MODEL_ID);
 
   if (!prompt || typeof prompt !== 'string') {
     return new Response(JSON.stringify({ error: 'Prompt is required' }), {
@@ -48,7 +49,7 @@ ${explain ? `## After the optimized prompt, add a section titled "---EXPLANATION
 - DO NOT wrap your response with extra commentary — output ONLY the optimized prompt${explain ? ' followed by the explanation section' : ''}`;
 
   const result = streamText({
-    model: primaryModel,
+    model: aiModel,
     system: systemPrompt,
     prompt: `Here is the raw prompt to optimize:\n\n${prompt}`,
   });
