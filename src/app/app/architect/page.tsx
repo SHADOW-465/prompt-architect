@@ -1,9 +1,12 @@
 'use client';
 
+import { useState } from 'react';
 import { useAppStore } from '@/lib/store/useAppStore';
 import StepIndicator from '@/components/ui/StepIndicator';
 import PromptOutput from '@/components/prompt/PromptOutput';
+import ModelSelector from '@/components/ui/ModelSelector';
 import type { ArchitectStep } from '@/lib/store/useAppStore';
+import { DEFAULT_MODEL_ID } from '@/lib/models';
 import {
   Compass,
   ArrowRight,
@@ -49,6 +52,8 @@ export default function ArchitectPage() {
     resetArchitect,
   } = useAppStore();
 
+  const [selectedModel, setSelectedModel] = useState(DEFAULT_MODEL_ID);
+
   const currentStepIndex = STEP_ORDER.indexOf(architect.step);
   const completedSteps = STEP_ORDER.slice(0, currentStepIndex);
 
@@ -63,7 +68,7 @@ export default function ArchitectPage() {
       const res = await fetch('/api/architect/intent', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ idea: architect.idea }),
+        body: JSON.stringify({ idea: architect.idea, model: selectedModel }),
       });
       const data = await res.json();
       if (data.error) throw new Error(data.error);
@@ -87,7 +92,7 @@ export default function ArchitectPage() {
       const res = await fetch('/api/architect/questions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ idea: architect.idea, parsedIntent: architect.parsedIntent }),
+        body: JSON.stringify({ idea: architect.idea, parsedIntent: architect.parsedIntent, model: selectedModel }),
       });
       const data = await res.json();
       if (data.error) throw new Error(data.error);
@@ -124,6 +129,7 @@ export default function ArchitectPage() {
           idea: architect.idea,
           parsedIntent: architect.parsedIntent,
           requirements,
+          model: selectedModel,
         }),
       });
       const data = await res.json();
@@ -166,6 +172,7 @@ export default function ArchitectPage() {
           parsedIntent: architect.parsedIntent,
           requirements,
           selectedArchitecture: selectedArch,
+          model: selectedModel,
         }),
       });
       const data = await res.json();
@@ -260,7 +267,8 @@ export default function ArchitectPage() {
               className="input-field flex-grow min-h-[200px] resize-none text-[15px] leading-relaxed"
               placeholder="e.g., I want to build an AI-powered customer support chatbot that can handle refund requests, track orders, and escalate complex issues to human agents..."
             />
-            <div className="flex justify-end">
+            <div className="flex items-center justify-between">
+              <ModelSelector value={selectedModel} onChange={setSelectedModel} disabled={isProcessing} />
               <button
                 onClick={handleAnalyzeIntent}
                 disabled={!architect.idea.trim() || isProcessing}
@@ -303,13 +311,16 @@ export default function ArchitectPage() {
               <button onClick={goBack} className="btn-ghost flex items-center gap-1.5">
                 <ArrowLeft size={14} /> Back
               </button>
-              <button onClick={handleGenerateQuestions} disabled={isProcessing} className="btn-primary flex items-center gap-2">
-                {isProcessing ? (
-                  <><Loader2 size={16} className="animate-spin" /> Generating...</>
-                ) : (
-                  <><HelpCircle size={16} /> Get Requirements <ArrowRight size={16} /></>
-                )}
-              </button>
+              <div className="flex items-center gap-3">
+                <ModelSelector value={selectedModel} onChange={setSelectedModel} disabled={isProcessing} />
+                <button onClick={handleGenerateQuestions} disabled={isProcessing} className="btn-primary flex items-center gap-2">
+                  {isProcessing ? (
+                    <><Loader2 size={16} className="animate-spin" /> Generating...</>
+                  ) : (
+                    <><HelpCircle size={16} /> Get Requirements <ArrowRight size={16} /></>
+                  )}
+                </button>
+              </div>
             </div>
           </div>
         )}
@@ -345,13 +356,16 @@ export default function ArchitectPage() {
               <button onClick={goBack} className="btn-ghost flex items-center gap-1.5">
                 <ArrowLeft size={14} /> Back
               </button>
-              <button onClick={handleGenerateArchitecture} disabled={isProcessing} className="btn-primary flex items-center gap-2">
-                {isProcessing ? (
-                  <><Loader2 size={16} className="animate-spin" /> Designing...</>
-                ) : (
-                  <><Layers size={16} /> Generate Architecture <ArrowRight size={16} /></>
-                )}
-              </button>
+              <div className="flex items-center gap-3">
+                <ModelSelector value={selectedModel} onChange={setSelectedModel} disabled={isProcessing} />
+                <button onClick={handleGenerateArchitecture} disabled={isProcessing} className="btn-primary flex items-center gap-2">
+                  {isProcessing ? (
+                    <><Loader2 size={16} className="animate-spin" /> Designing...</>
+                  ) : (
+                    <><Layers size={16} /> Generate Architecture <ArrowRight size={16} /></>
+                  )}
+                </button>
+              </div>
             </div>
           </div>
         )}
@@ -463,13 +477,16 @@ export default function ArchitectPage() {
               <button onClick={goBack} className="btn-ghost flex items-center gap-1.5">
                 <ArrowLeft size={14} /> Back
               </button>
-              <button onClick={handleCompilePrompts} disabled={isProcessing} className="btn-primary flex items-center gap-2">
-                {isProcessing ? (
-                  <><Loader2 size={16} className="animate-spin" /> Compiling...</>
-                ) : (
-                  <><FileOutput size={16} /> Generate Prompts <ArrowRight size={16} /></>
-                )}
-              </button>
+              <div className="flex items-center gap-3">
+                <ModelSelector value={selectedModel} onChange={setSelectedModel} disabled={isProcessing} />
+                <button onClick={handleCompilePrompts} disabled={isProcessing} className="btn-primary flex items-center gap-2">
+                  {isProcessing ? (
+                    <><Loader2 size={16} className="animate-spin" /> Compiling...</>
+                  ) : (
+                    <><FileOutput size={16} /> Generate Prompts <ArrowRight size={16} /></>
+                  )}
+                </button>
+              </div>
             </div>
           </div>
         )}
